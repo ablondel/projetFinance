@@ -1,0 +1,29 @@
+module App
+{
+  struct Transaction
+  {
+    long num;
+    long amount;
+    long account_source;
+    long account_destination;
+    boolean transaction_confirme;
+    long bank_source;
+    long bank_dest;
+  };
+  interface Bank
+  {
+    boolean create(in unsigned long num);
+    boolean destroy(in unsigned long num);
+    boolean deposit(in unsigned long amount, in unsigned long num);
+    boolean withdraw(in unsigned long amount, in unsigned long num);
+    boolean transfert(in unsigned long amount, in unsigned long numBank, in unsigned long num);
+    long balance(in unsigned long num);
+    boolean recevoirTransaction(in Transaction t);
+    boolean confirmerTransaction(in Transaction t);
+  };
+  interface InterBank
+  {
+    void envoyerTransaction(in Transaction t);
+    void confirmerTransaction(in Transaction t);
+  };
+};
