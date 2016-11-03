@@ -23,7 +23,7 @@ module App
   };
   interface InterBank
   {
-    void envoyerTransaction(in Transaction t);
-    void confirmerTransaction(in Transaction t);
+    boolean envoyerTransaction(in Transaction t);
+    boolean confirmerTransaction(in Transaction t);
   };
 };

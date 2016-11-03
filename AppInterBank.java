@@ -1,4 +1,4 @@
-package App;
+import App.*;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.*;
 import org.omg.PortableServer.POA;
@@ -7,7 +7,7 @@ import org.omg.CosNaming.*;
 
 
 
-public class AppServer
+public class AppInterBank
 {
   public static void main(String args[])
   {
@@ -30,14 +30,13 @@ public class AppServer
       // convert the generic CORBA object reference into typed Echo reference
       Bank bankRef = BankHelper.narrow(objRef);
 
-      NameComponent path1[ ] = ncRef.to_name("app.bank1");
+      NameComponent path1[ ] = ncRef.to_name("app.interbank1");
       ncRef.rebind(path1, bankRef);
-
-      orb.run();
+      orb.run();      
     }
     catch (Exception e)
     {
-      System.out.println("HelloServer Exception: " + e.getMessage());
+      System.out.println("HelloBank Exception: " + e.getMessage());
       e.printStackTrace();
     }
   }
