@@ -14,8 +14,12 @@ public class AppBank
     try
     {
       //CLIENT of InterBanK
+      System.out.println(args[0]);
       org.omg.CORBA.Object objRef;
-      ORB orb = ORB.init(args, null);
+      String test[] = new String[2];
+      test[0] = "-ORBInitRef";
+      test[1] = "NameService=corbaloc::127.0.0.1:2810/NameService";
+      ORB orb = ORB.init(test, null);
       objRef = orb.resolve_initial_references("NameService");
       NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
       objRef = ncRef.resolve_str("app.interbank1");
@@ -32,7 +36,10 @@ public class AppBank
     try
     {
       //Server for Clients
-      ORB orb = ORB.init(args, null);
+      String test[] = new String[2];
+      test[0] = "-ORBInitRef";
+      test[1] = "NameService=corbaloc::127.0.0.1:2810/NameService";
+      ORB orb = ORB.init(test, null);
       org.omg.CORBA.Object objRef = orb.resolve_initial_references("RootPOA");
       POA rootpoa = POAHelper.narrow(objRef);
       rootpoa.the_POAManager().activate();
@@ -41,7 +48,7 @@ public class AppBank
       BankImpl bankImpl = new BankImpl(1);
       objRef = rootpoa.servant_to_reference(bankImpl);
       Bank bankRef = BankHelper.narrow(objRef);
-      NameComponent path1[ ] = ncRef.to_name("app.bank1");
+      NameComponent path1[ ] = ncRef.to_name("app.bank"+args[0]);
       ncRef.rebind(path1, bankRef);
       orb.run();
     }
