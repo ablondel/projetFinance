@@ -25,5 +25,6 @@ module App
   {
     boolean envoyerTransaction(in Transaction t);
     boolean confirmerTransaction(in Transaction t);
+    boolean join(in unsigned long num);
   };
 };

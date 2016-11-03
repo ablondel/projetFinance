@@ -45,7 +45,7 @@ public class AppBank
       rootpoa.the_POAManager().activate();
       objRef = orb.resolve_initial_references("NameService");
       NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
-      BankImpl bankImpl = new BankImpl(1);
+      BankImpl bankImpl = new BankImpl(Integer.parseInt(args[0]));
       objRef = rootpoa.servant_to_reference(bankImpl);
       Bank bankRef = BankHelper.narrow(objRef);
       NameComponent path1[ ] = ncRef.to_name("app.bank"+args[0]);
