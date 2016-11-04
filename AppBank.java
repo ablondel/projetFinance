@@ -34,6 +34,7 @@ public class AppBank
     try
     {
       //Server for Clients
+      int numero_bank = Integer.parseInt(args[0]);
       String test[] = new String[2];
       test[0] = "-ORBInitRef";
       test[1] = "NameService=corbaloc::127.0.0.1:2810/NameService";
@@ -43,12 +44,15 @@ public class AppBank
       rootpoa.the_POAManager().activate();
       objRef = orb.resolve_initial_references("NameService");
       NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
-      BankImpl bankImpl = new BankImpl(Integer.parseInt(args[0]), interbank);
+      BankImpl bankImpl = new BankImpl(numero_bank, interbank);
       objRef = rootpoa.servant_to_reference(bankImpl);
       Bank bankRef = BankHelper.narrow(objRef);
-      NameComponent path1[ ] = ncRef.to_name("app.bank"+args[0]);
+      NameComponent path1[ ] = ncRef.to_name("app.bank"+numero_bank);
       ncRef.rebind(path1, bankRef);
-      orb.run();
+      ServerThread st = new ServerThread(orb);
+      st.start();
+      //orb.run();
+      bankImpl.declareMyself();
     }
     catch (Exception e)
     {

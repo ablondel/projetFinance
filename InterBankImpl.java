@@ -12,6 +12,11 @@ class InterBankImpl extends InterBankPOA
 {
   private ArrayList<Bank> list_bank = new ArrayList<Bank>();
   private ArrayList<Transaction> list_transaction = new ArrayList<Transaction>();
+  private int numeroInterBank = 1;
+  public int get_num()
+  {
+    return this.numeroInterBank;
+  }
   public boolean envoyerTransaction(Transaction t)
   {
     list_transaction.add(t);
@@ -43,6 +48,7 @@ class InterBankImpl extends InterBankPOA
       objRef = ncRef.resolve_str("app.bank"+num);
       Bank bank1 = BankHelper.narrow(objRef);
       list_bank.add(bank1);
+      System.out.println("Bank number "+bank1.get_num()+" Added to InterBank");
       toReturn = true;
     }
     catch (Exception e)

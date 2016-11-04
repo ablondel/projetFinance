@@ -17,6 +17,11 @@ class BankImpl extends BankPOA
     this.numeroBank = num;
     this.interBank = interBank;
   }
+  public boolean declareMyself()
+  {
+    this.interBank.join(this.numeroBank);
+    return true;
+  }
   public int get_num()
   {
     return this.numeroBank;
@@ -25,6 +30,7 @@ class BankImpl extends BankPOA
   {
     Account new_account = new Account(num);
     this.list_account.add(new_account);
+    System.out.println("Account number "+num+" Added to Bank");
     return true;
   }
   public boolean destroy(int num)

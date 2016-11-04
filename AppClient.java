@@ -11,6 +11,7 @@ public class AppClient
 {
   public static void main(String args[])
   {
+    System.out.println("Creating Account "+args[1]+" in Bank "+args[0]);
     int account_num = Integer.parseInt(args[1]);
     try
     {
@@ -24,15 +25,16 @@ public class AppClient
       NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
       objRef = ncRef.resolve_str("app.bank"+args[0]);
       Bank bank1 = BankHelper.narrow(objRef);
-      boolean response = bank1.create(Integer.parseInt(args[1]));
+      boolean response = bank1.create(account_num);
       //System.out.println(response);
       //response = bank1.deposit(1000, 1);
       //System.out.println(response);
       //int balance = bank1.balance(1);
       //System.out.println(balance);
-      int input = -1;
+      int input = 9;
       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
       response = false;
+      int balance = 0;
       int money = 0;
       int dest_bank = 0;
       int dest_account = 0;
@@ -42,37 +44,44 @@ public class AppClient
         System.out.println("1 - Deposit money");
         System.out.println("2 - Withdraw money");
         System.out.println("3 - Transfer money");
+        System.out.println("4 - Display sold");
         System.out.println("0 - Quit");
-        br = new BufferedReader(new InputStreamReader(System.in));
+        //br = new BufferedReader(new InputStreamReader(System.in));
         input = Integer.parseInt(br.readLine());
         switch (input)
         {
           case 1:
             System.out.println("Deposit - How much?: ");
-            br = new BufferedReader(new InputStreamReader(System.in));
+            //br = new BufferedReader(new InputStreamReader(System.in));
             money = Integer.parseInt(br.readLine());
-            response = bank1.deposit(account_num, money);
+            response = bank1.deposit(money, account_num);
             System.out.println(response);
             break;
           case 2:
             System.out.println("Withdraw - How much?: ");
-            br = new BufferedReader(new InputStreamReader(System.in));
+            //br = new BufferedReader(new InputStreamReader(System.in));
             money = Integer.parseInt(br.readLine());
-            response = bank1.withdraw(account_num, money);
+            response = bank1.withdraw(money, account_num);
             System.out.println(response);
             break;
           case 3:
             System.out.println("Transfer - Bank Number: ");
-            br = new BufferedReader(new InputStreamReader(System.in));
+            //br = new BufferedReader(new InputStreamReader(System.in));
             dest_bank = Integer.parseInt(br.readLine());
             System.out.println("Transfer - Account Number: ");
             br = new BufferedReader(new InputStreamReader(System.in));
             dest_account = Integer.parseInt(br.readLine());
             System.out.println("Transfer - How much?: ");
-            br = new BufferedReader(new InputStreamReader(System.in));
+            //br = new BufferedReader(new InputStreamReader(System.in));
             money = Integer.parseInt(br.readLine());
             response = bank1.transfert(account_num, money, dest_bank, dest_account);
             System.out.println(response);
+            break;
+          case 4:
+            System.out.println("Sold - Here is how much money you have: ");
+            //br = new BufferedReader(new InputStreamReader(System.in));
+            balance = bank1.balance(account_num);
+            System.out.println(balance);
             break;
           default:
             input = 0;
