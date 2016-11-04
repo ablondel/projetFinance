@@ -11,9 +11,15 @@ class BankImpl extends BankPOA
 {
   private ArrayList<Account> list_account = new ArrayList<Account>();
   private int numeroBank;
-  public BankImpl(int num)
+  private InterBank interBank;
+  public BankImpl(int num, InterBank interBank)
   {
     this.numeroBank = num;
+    this.interBank = interBank;
+  }
+  public int get_num()
+  {
+    return this.numeroBank;
   }
   public boolean create(int num)
   {
@@ -51,9 +57,23 @@ class BankImpl extends BankPOA
     a.withdraw(amount);
     return true;
   }
-  public boolean transfert(int amount, int bankNum, int accountNum)
+  public boolean transfert(int accountNum, int amount, int bankNum, int dest_accountNum)
   {
-    return true;
+    boolean toReturn = false;
+    if (this.withdraw(amount, accountNum))
+    {
+      if(bankNum == this.numeroBank)
+      {
+        this.deposit(amount, dest_accountNum);
+      }
+      else
+      {
+        Transaction t = new Transaction(1, amount, accountNum, dest_accountNum, false, this.numeroBank, bankNum);
+        this.interBank.envoyerTransaction(t);
+      }
+      toReturn = true;
+    }
+    return toReturn;
   }
   public int balance(int num)
   {
@@ -62,10 +82,19 @@ class BankImpl extends BankPOA
   }
   public boolean recevoirTransaction(Transaction t)
   {
-    return true;
+    boolean toReturn = false;
+    if(t.bank_dest == this.numeroBank && this.find_account(t.account_destination) != null)
+    {
+      Account a = this.find_account(t.account_destination);
+      a.deposit(t.amount);
+      toReturn = true;
+      System.out.println("Transfer Recu, Envoie de confirmation...");
+    }
+    return toReturn;
   }
   public boolean confirmerTransaction(Transaction t)
   {
+    System.out.println("Reception de confirmation sur la transaction :)");
     return true;
   }
 }
