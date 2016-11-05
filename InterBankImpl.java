@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 class InterBankImpl extends InterBankPOA
 {
-  private ArrayList<Bank> list_bank = new ArrayList<Bank>();
+  private ArrayList<BankTransaction> list_bank = new ArrayList<BankTransaction>();
   private ArrayList<Transaction> list_transaction = new ArrayList<Transaction>();
   private int numeroInterBank = 1;
   public int get_num()
@@ -20,7 +20,7 @@ class InterBankImpl extends InterBankPOA
   public boolean envoyerTransaction(Transaction t)
   {
     list_transaction.add(t);
-    Bank bank = this.find_bank(t.bank_dest);
+    BankTransaction bank = this.find_bank(t.bank_dest);
     bank.recevoirTransaction(t);
     this.confirmerTransaction(t);
     return true;
@@ -28,7 +28,7 @@ class InterBankImpl extends InterBankPOA
   public boolean confirmerTransaction(Transaction t)
   {
     t.transaction_confirme = true;
-    Bank confirmation_bank = this.find_bank(t.bank_source);
+    BankTransaction confirmation_bank = this.find_bank(t.bank_source);
     confirmation_bank.confirmerTransaction(t);
     return true;
   }
@@ -45,8 +45,8 @@ class InterBankImpl extends InterBankPOA
       ORB orb = ORB.init(test, null);
       objRef = orb.resolve_initial_references("NameService");
       NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
-      objRef = ncRef.resolve_str("app.bank"+num);
-      Bank bank1 = BankHelper.narrow(objRef);
+      objRef = ncRef.resolve_str("app.bankTransaction"+num);
+      BankTransaction bank1 = BankTransactionHelper.narrow(objRef);
       list_bank.add(bank1);
       System.out.println("Bank number "+bank1.get_num()+" Added to InterBank");
       toReturn = true;
@@ -58,12 +58,12 @@ class InterBankImpl extends InterBankPOA
     }
     return toReturn;
   }
-  private Bank find_bank(int num)
+  private BankTransaction find_bank(int num)
   {
-    Bank toReturn = null;
-    for (Iterator<Bank> iter = this.list_bank.listIterator(); iter.hasNext(); )
+    BankTransaction toReturn = null;
+    for (Iterator<BankTransaction> iter = this.list_bank.listIterator(); iter.hasNext(); )
     {
-      Bank bank = iter.next();
+      BankTransaction bank = iter.next();
       if (bank.get_num() == num)
       {
           toReturn = bank;

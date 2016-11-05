@@ -23,8 +23,8 @@ public class AppClient
       ORB orb = ORB.init(test, null);
       objRef = orb.resolve_initial_references("NameService");
       NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
-      objRef = ncRef.resolve_str("app.bank"+args[0]);
-      Bank bank1 = BankHelper.narrow(objRef);
+      objRef = ncRef.resolve_str("app.bankCustomer"+args[0]);
+      BankCustomer bank1 = BankCustomerHelper.narrow(objRef);
       boolean response = bank1.create(account_num);
       //System.out.println(response);
       //response = bank1.deposit(1000, 1);

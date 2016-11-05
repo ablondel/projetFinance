@@ -10,7 +10,15 @@ module App
     long bank_source;
     long bank_dest;
   };
-  interface Bank
+
+  interface BankTransaction
+  {
+    boolean recevoirTransaction(in Transaction t);
+    boolean confirmerTransaction(in Transaction t);
+    long get_num();
+  };
+
+  interface BankCustomer
   {
     boolean create(in unsigned long num);
     boolean destroy(in unsigned long num);
@@ -18,10 +26,9 @@ module App
     boolean withdraw(in unsigned long amount, in unsigned long num);
     boolean transfert(in unsigned long myNum, in unsigned long amount, in unsigned long numBank, in unsigned long num);
     long balance(in unsigned long num);
-    boolean recevoirTransaction(in Transaction t);
-    boolean confirmerTransaction(in Transaction t);
     long get_num();
   };
+
   interface InterBank
   {
     boolean envoyerTransaction(in Transaction t);
