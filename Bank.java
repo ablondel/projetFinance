@@ -70,6 +70,7 @@ class Bank {
       boolean toReturn = false;
       if (this.withdrawAccount(amount, accountNum))
       {
+        this.depositAccount(amount, accountNum);
         if(bankNum == this.numeroBank)
         {
           this.depositAccount(amount, dest_accountNum);
@@ -77,6 +78,8 @@ class Bank {
         else
         {
           Transaction t = new Transaction(1, amount, accountNum, dest_accountNum, false, this.numeroBank, bankNum);
+          System.out.println("amount: "+t.amount+" Acc_to:"+t.account_destination+" Acc_from:"+t.account_source+" Confirmation?:"+t.transaction_confirme+" B_to:"+t.bank_dest+" B_from:"+t.bank_source);
+          System.out.println("Sending new transfer of "+t.amount+"$ to Bank "+t.bank_dest+" and Account "+t.account_destination);
           this.interBank.envoyerTransaction(t);
         }
         toReturn = true;
@@ -97,8 +100,17 @@ class Bank {
       {
         Account a = this.find_account(t.account_destination);
         a.deposit(t.amount);
+        t.transaction_confirme = true;
+        System.out.println("Money transfer of "+t.amount+"$ received from Bank "+t.bank_source+", Sending confirmation...");
         toReturn = true;
-        System.out.println("Transfer Recu, Envoie de confirmation...");
+        try
+        {
+          this.interBank.confirmerTransaction(t);
+        }
+        catch (Exception e)
+        {
+          System.out.println("InterBank is not reachable right now.... RIP :(");
+        }
       }
       return toReturn;
     }

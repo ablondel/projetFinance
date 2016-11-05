@@ -26,7 +26,8 @@ class BankImplTransaction extends BankTransactionPOA {
   }
   public boolean confirmerTransaction(Transaction t)
   {
-    System.out.println("Reception de confirmation sur la transaction :)");
+    System.out.println("Received Confirmation: "+t.amount+"$ will be deduct from account number "+t.account_source);
+    this.bankRef.withdrawAccount(t.account_source, t.amount);
     return true;
   }
 }
