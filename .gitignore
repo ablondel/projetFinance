@@ -2,3 +2,4 @@
 /App/*
 #Git ignore all compiled java files (.class)
 *.class
+.DS_Store
