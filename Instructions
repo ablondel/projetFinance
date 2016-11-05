@@ -23,7 +23,7 @@ java AppInterBank -ORBInitRef NameServi=corbaloc::localhost:2810/NameService
 java AppBank 1
 
 #4. Add a Bank (ex: Numero_bank=2):
-java AppBank2
+java AppBank 2
 
 #4. Add a Client (ex: Numero_bank=1, Numero_client=1):
 java AppClient 1 1
