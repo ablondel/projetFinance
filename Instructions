@@ -17,7 +17,7 @@ javac *.java
 tnameserv -ORBInitialPort 2810
 
 #2. start the AppInterBank:
-java AppInterBank -ORBInitRef NameServi=corbaloc::localhost:2810/NameService
+java AppInterBank -ORBInitRef NameService=corbaloc::localhost:2810/NameService
 
 #3. Add a Bank (ex: Numero_bank=1):
 java AppBank 1
