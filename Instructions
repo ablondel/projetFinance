@@ -1,0 +1,37 @@
+#Hi, this is our git project
+#Here are the instructions to be able to compile this source code:
+
+#1. Generate the App package from the App.idl file:
+idlj -fall App.idl
+
+#2. Compile the new generated App package:
+javac App/*.java
+
+#3. Compile the source:
+javac *.java
+
+
+## Now you are ready to run our software
+
+#1. start the NameServer:
+tnameserv -ORBInitialPort 2810
+
+#2. start the AppInterBank:
+java AppInterBank -ORBInitRef NameServi=corbaloc::localhost:2810/NameService
+
+#3. Add a Bank (ex: Numero_bank=1):
+java AppBank 1
+
+#4. Add a Bank (ex: Numero_bank=2):
+java AppBank2
+
+#4. Add a Client (ex: Numero_bank=1, Numero_client=1):
+java AppClient 1 1
+
+#5. Add a Client (ex: Numero_bank=1, Numero_client=2):
+java AppClient 1 2
+
+#6. Add a Client (ex: Numero_bank=2, Numero_client=1):
+java AppClient 2 1
+
+#7. Enjoy managing your money! (AppClient Interactions)
