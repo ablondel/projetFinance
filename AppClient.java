@@ -26,11 +26,6 @@ public class AppClient
       objRef = ncRef.resolve_str("app.bankCustomer"+args[0]);
       BankCustomer bank1 = BankCustomerHelper.narrow(objRef);
       boolean response = bank1.create(account_num);
-      //System.out.println(response);
-      //response = bank1.deposit(1000, 1);
-      //System.out.println(response);
-      //int balance = bank1.balance(1);
-      //System.out.println(balance);
       int input = 9;
       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
       response = false;

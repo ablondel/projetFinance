@@ -40,6 +40,7 @@ public class AppBank
       test[0] = "-ORBInitRef";
       test[1] = "NameService=corbaloc::127.0.0.1:2810/NameService";
       ORB orb = ORB.init(test, null);
+      //Push BankTransaction Object to the NameServer
       org.omg.CORBA.Object objRef = orb.resolve_initial_references("RootPOA");
       POA rootpoa = POAHelper.narrow(objRef);
       rootpoa.the_POAManager().activate();
@@ -53,6 +54,7 @@ public class AppBank
       ServerThread st = new ServerThread(orb);
       st.start();
 
+      //Push BankCustomer Object to the NameServer
       org.omg.CORBA.Object objRef2 = orb.resolve_initial_references("RootPOA");
       POA rootpoa2 = POAHelper.narrow(objRef2);
       rootpoa2.the_POAManager().activate();
@@ -64,8 +66,7 @@ public class AppBank
       ServerThread st1 = new ServerThread(orb);
       st1.start();
 
-
-
+      //Create Call-Back to InterBank
       bankA.declareMyself();
 
     }

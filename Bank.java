@@ -43,7 +43,6 @@ class Bank {
       return toReturn;
     }
 
-
     public void create(int num)
     {
       Account new_account = new Account(num);
@@ -85,13 +84,11 @@ class Bank {
       return toReturn;
     }
 
-
     public int balance(int num)
     {
       Account a = this.find_account(num);
       return a.balance();
     }
-
 
     public boolean recevoirTransaction(Transaction t)
     {
