@@ -29,7 +29,7 @@ class InterBankImpl extends InterBankPOA
   {
     t.transaction_confirme = true;
     Bank confirmation_bank = this.find_bank(t.bank_source);
-    confirmation_bank.recevoirTransaction(t);
+    confirmation_bank.confirmerTransaction(t);
     return true;
   }
   public boolean join(int num)
