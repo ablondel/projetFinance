@@ -27,7 +27,7 @@ class InterBankImpl extends InterBankPOA
         BankTransaction bank = this.find_bank(t.bank_dest);
         InterBankSender ibs = new InterBankSender(t, bank, t.transaction_confirme);
         ibs.start();
-        bank.recevoirTransaction(t);
+        //bank.recevoirTransaction(t);
         System.out.println("A live transaction of "+t.amount+"$ was successffuly sent to Bank "+t.bank_dest+" by Bank "+t.bank_source);
       }
       catch (Exception e)
@@ -46,14 +46,13 @@ class InterBankImpl extends InterBankPOA
   {
     if(t.transaction_confirme)
     {
-      System.out.println("A transaction of "+t.amount+"$ was successful on Bank "+t.bank_dest+" sent by Bank "+t.bank_source);
       this.list_transaction_done.add(t);
       try
       {
         BankTransaction confirmation_bank = this.find_bank(t.bank_source);
-        //confirmation_bank.confirmerTransaction(t);
         InterBankSender ibs = new InterBankSender(t, confirmation_bank, t.transaction_confirme);
         ibs.start();
+        //confirmation_bank.confirmerTransaction(t);
         System.out.println("A live confirmation of "+t.amount+"$ was successffuly sent back to Bank "+t.bank_source+" by Bank "+t.bank_dest);
       }
       catch (Exception e)

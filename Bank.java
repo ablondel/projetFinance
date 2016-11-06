@@ -78,7 +78,7 @@ class Bank {
         else
         {
           Transaction t = new Transaction(1, amount, accountNum, dest_accountNum, false, this.numeroBank, bankNum);
-          System.out.println("amount: "+t.amount+" Acc_to:"+t.account_destination+" Acc_from:"+t.account_source+" Confirmation?:"+t.transaction_confirme+" B_to:"+t.bank_dest+" B_from:"+t.bank_source);
+          //DEBUG//System.out.println("amount: "+t.amount+" Acc_to:"+t.account_destination+" Acc_from:"+t.account_source+" Confirmation?:"+t.transaction_confirme+" B_to:"+t.bank_dest+" B_from:"+t.bank_source);
           System.out.println("Sending new transfer of "+t.amount+"$ to Bank "+t.bank_dest+" and Account "+t.account_destination);
           this.interBank.envoyerTransaction(t);
         }
@@ -105,7 +105,9 @@ class Bank {
         toReturn = true;
         try
         {
-          this.interBank.confirmerTransaction(t);
+          BankSender bs = new BankSender(t, this.interBank, true);
+          bs.start();
+          //this.interBank.confirmerTransaction(t);
         }
         catch (Exception e)
         {
