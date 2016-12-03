@@ -14,10 +14,10 @@ javac *.java
 ## Now you are ready to run our software
 
 #1. start the NameServer:
-tnameserv -ORBInitialPort 2810
+orbd -ORBInitialPort 2810
 
 #2. start the AppInterBank:
-java AppInterBank -ORBInitRef NameService=corbaloc::localhost:2810/NameService
+java AppInterBank
 
 #3. Add a Bank (ex: Numero_bank=1):
 java AppBank 1
@@ -35,3 +35,7 @@ java AppClient 1 2
 java AppClient 2 1
 
 #7. Enjoy managing your money! (AppClient Interactions)
+
+
+register -server AppInterBank -classpath . -applicationName interbankregister 
+register -server AppBank -applicationName bank1 -classpath . -args 1
