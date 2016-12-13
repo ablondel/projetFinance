@@ -85,9 +85,6 @@ public class TestClient
         System.out.print('.'); nbTest++;
         testTransfert();
 
-        bank1.closeAccount(num1);
-        bank2.closeAccount(num2);
-
         System.out.println("(" + nbTest + "):OK: " + getClass().getName());
     }
 

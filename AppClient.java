@@ -135,11 +135,10 @@ public class AppClient
 
               break;
             case 0:
-              bank1.closeAccount(account_num);
               break;
+
             default:
               input = 0;
-              bank1.closeAccount(account_num);
               break;
           }
           // if (!bank1.isOpened()){

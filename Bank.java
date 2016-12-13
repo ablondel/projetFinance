@@ -9,7 +9,6 @@ import java.util.Iterator;
 
 class Bank {
   private ArrayList<Account> list_account_activate = new ArrayList<Account>();
-  private ArrayList<Account> list_account_stopped = new ArrayList<Account>();
   private int numeroBank;
   private InterBank interBank;
   private boolean isOpened = true;
@@ -20,7 +19,6 @@ class Bank {
 
   public void close(){
     isOpened = false;
-    boolean b = this.closeAllAccount();
   }
 
 
@@ -53,57 +51,21 @@ class Bank {
     return toReturn;
   }
 
-  public Account find_account_stopped(int num)
-  {
-    Account toReturn = null;
-    for (Iterator<Account> iter = this.list_account_stopped.listIterator(); iter.hasNext(); )
-    {
-      Account a = iter.next();
-      if (a.get_account_num() == num)
-      {
-        toReturn = a;
-      }
-    }
-    return toReturn;
-  }
 
   public void create(int num)
   {
     if (isOpened){
-      Account new_account = this.find_account_stopped(num);
+      Account new_account = this.find_account_activate(num);
       if (new_account == null){
         new_account = new Account(num);
-      }else{
-        this.list_account_stopped.remove(new_account);
+        this.list_account_activate.add(new_account);
       }
-      this.list_account_activate.add(new_account);
 
       System.out.println("[BANK "+this.numeroBank+"] Account number "+new_account.get_account_num()+" Added");
       this.interBank.get_pending_transaction(this.numeroBank);
     }
   }
 
-  public boolean closeAccount(int num){
-    Account a = this.find_account_activate(num);
-    if (a == null){
-      return false;
-    }
-    this.list_account_activate.remove(a);
-    this.list_account_stopped.add(a);
-    System.out.println("[BANK "+this.numeroBank+"] Account number "+a.get_account_num()+" Removed");
-    return true;
-  }
-
-  public boolean closeAllAccount(){
-    for (Iterator<Account> iter = this.list_account_activate.listIterator(); iter.hasNext(); )
-    {
-      Account a = iter.next();
-      this.list_account_stopped.add(a);
-      System.out.println("[BANK "+this.numeroBank+"] Account number "+a.get_account_num()+" Removed");
-    }
-    this.list_account_activate.clear();
-    return true;
-  }
 
   public boolean depositAccount(int amount, int num){
     if (isOpened){
@@ -142,7 +104,7 @@ class Bank {
   public boolean transfert(int accountNum, int amount, int bankNum, int dest_accountNum)
   {
     boolean toReturn = false;
-    if (isOpened){
+    if (isOpened && !(dest_accountNum == accountNum && bankNum == this.numeroBank)){
 
       if (this.withdrawAccount(amount, accountNum))
       {
@@ -150,6 +112,7 @@ class Bank {
         if(bankNum == this.numeroBank)
         {
           this.depositAccount(amount, dest_accountNum);
+          this.withdrawAccount(amount, accountNum);
         }
         else
         {
@@ -211,12 +174,6 @@ class Bank {
     {
       Account a = iter.next();
       System.out.println("\t ** ACCOUNT "+a.get_account_num()+" [OPENED]");
-    }
-
-    for (Iterator<Account> iter = this.list_account_stopped.listIterator(); iter.hasNext(); )
-    {
-      Account a = iter.next();
-      System.out.println("\t ** ACCOUNT "+a.get_account_num()+" [CLOSED]");
     }
   }
 

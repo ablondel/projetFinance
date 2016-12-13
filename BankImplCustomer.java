@@ -53,9 +53,6 @@ class BankImplCustomer extends BankCustomerPOA {
     return this.bankRef.balance(num);
   }
 
-  public boolean closeAccount(int num){
-    return this.bankRef.closeAccount(num);
 
-  }
 
 }
