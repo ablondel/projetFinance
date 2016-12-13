@@ -16,16 +16,12 @@ ORBD=orbd -ORBInitialPort ${ORB_INITIAL_PORT}
 
 SERVERTOOL=servertool
 
+all: clean build runorbd
+
 build: stubs
 
 stubs:
 	$(IDLJ) $(IDLJ_FLAGS) App.idl; $(JAVAC) *.java;$(JAVAC) App/*.java
-
-client:
-	$(JAVA) AppClient $(ARG)
-
-bank:
-	$(JAVA) AppBank $^
 
 test:
 	$(JAVA) -ea LancerTest

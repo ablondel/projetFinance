@@ -14,7 +14,13 @@ javac *.java
 ## Now you are ready to run our software
 
 #1. start the NameServer:
-tnameserv -ORBInitialPort 2810
+orbd -ORBInitialPort 2810
+
+#1bis. Create the persisantant InterBank server (first connexion):
+servertool -ORBInitialPort 2810
+# Enter the following command in servertool to register server:
+> register -server AppInterBank -classpath . -applicationName interbankregister
+
 
 #2. start the AppInterBank:
 java AppInterBank -ORBInitRef NameService=corbaloc::localhost:2810/NameService

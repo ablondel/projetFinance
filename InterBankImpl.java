@@ -46,7 +46,7 @@ class InterBankImpl extends InterBankPOA
           else
           {
             System.out.println("------------------------------------------");
-            System.out.println("Banque "+t.bank_dest+" doesn't right now!");
+            System.out.println("Banque "+t.bank_dest+" doesn't exist right now!");
             System.out.println("------------------------------------------");
             this.list_transaction_pending.add(t);
           }
@@ -95,7 +95,7 @@ class InterBankImpl extends InterBankPOA
           else
           {
             System.out.println("------------------------------------------");
-            System.out.println("Banque "+t.bank_dest+" doesn't right now!");
+            System.out.println("Banque "+t.bank_dest+" doesn't exist right now!");
             System.out.println("------------------------------------------");
             this.list_transaction_pending.add(t);
           }
