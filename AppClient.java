@@ -60,7 +60,12 @@ public class AppClient
               }
                 money = Integer.parseInt(line);
                 response = bank1.deposit(money, account_num);
-                System.out.println(response);
+                if(response){
+                  System.out.println("Operation Successful");
+                }else{
+                  System.out.println("Operation Unsuccessful");
+                }
+
 
               break;
             case 2:
@@ -74,7 +79,11 @@ public class AppClient
               }
               money = Integer.parseInt(line);
               response = bank1.withdraw(money, account_num);
-              System.out.println(response);
+              if(response){
+                System.out.println("Operation Successful");
+              }else{
+                System.out.println("Operation Unsuccessful");
+              }
               break;
             case 3:
               System.out.println("Transfer - Bank Number: ");
@@ -107,13 +116,23 @@ public class AppClient
               }
               money = Integer.parseInt(line);
               response = bank1.transfert(account_num, money, dest_bank, dest_account);
-              System.out.println(response);
+              if(response){
+                System.out.println("Operation Successful");
+              }else{
+                System.out.println("Operation Unsuccessful");
+              }
               break;
             case 4:
-              System.out.println("Sold - Here is how much money you have: ");
+
               //br = new BufferedReader(new InputStreamReader(System.in));
               balance = bank1.balance(account_num);
-              System.out.println(balance);
+              if(balance == -1){
+                System.out.println("Operation Unsuccessful");
+              }else{
+                System.out.println("Sold - Here is how much money you have: ");
+                System.out.println(balance);
+              }
+
               break;
             case 0:
               bank1.closeAccount(account_num);

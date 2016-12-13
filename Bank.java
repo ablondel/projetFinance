@@ -8,71 +8,68 @@ import java.util.Iterator;
 
 
 class Bank {
-    private ArrayList<Account> list_account_activate = new ArrayList<Account>();
-    private ArrayList<Account> list_account_stopped = new ArrayList<Account>();
-    private int numeroBank;
-    private InterBank interBank;
-    // public boolean isOpened = true;
-    //
-    // public void open(){
-    //   isOpened = true;
-    // }
-    //
-    // public boolean isOpened(){
-    //   return isOpened;
-    // }
-    //
-    // public void close(){
-    //   isOpened = false;
-    // }
+  private ArrayList<Account> list_account_activate = new ArrayList<Account>();
+  private ArrayList<Account> list_account_stopped = new ArrayList<Account>();
+  private int numeroBank;
+  private InterBank interBank;
+  private boolean isOpened = true;
+
+  public void open(){
+    isOpened = true;
+  }
+
+  public void close(){
+    isOpened = false;
+    boolean b = this.closeAllAccount();
+  }
 
 
-    public Bank(int num, InterBank interBank)
+  public Bank(int num, InterBank interBank)
+  {
+    this.numeroBank = num;
+    this.interBank = interBank;
+  }
+
+  public int get_num()
+  {
+    return this.numeroBank;
+  }
+
+  public void rmAccount(int num){
+    this.list_account_activate.remove(this.find_account_activate(num));
+  }
+
+  public Account find_account_activate(int num)
+  {
+    Account toReturn = null;
+    for (Iterator<Account> iter = this.list_account_activate.listIterator(); iter.hasNext(); )
     {
-      this.numeroBank = num;
-      this.interBank = interBank;
-    }
-
-    public int get_num()
-    {
-      return this.numeroBank;
-    }
-
-    public void rmAccount(int num){
-     this.list_account_activate.remove(this.find_account_activate(num));
-   }
-
-    public Account find_account_activate(int num)
-    {
-      Account toReturn = null;
-      for (Iterator<Account> iter = this.list_account_activate.listIterator(); iter.hasNext(); )
+      Account a = iter.next();
+      if (a.get_account_num() == num)
       {
-        Account a = iter.next();
-        if (a.get_account_num() == num)
-        {
-            toReturn = a;
-        }
+        toReturn = a;
       }
-      return toReturn;
     }
+    return toReturn;
+  }
 
-    public Account find_account_stopped(int num)
+  public Account find_account_stopped(int num)
+  {
+    Account toReturn = null;
+    for (Iterator<Account> iter = this.list_account_stopped.listIterator(); iter.hasNext(); )
     {
-      Account toReturn = null;
-      for (Iterator<Account> iter = this.list_account_stopped.listIterator(); iter.hasNext(); )
+      Account a = iter.next();
+      if (a.get_account_num() == num)
       {
-        Account a = iter.next();
-        if (a.get_account_num() == num)
-        {
-            toReturn = a;
-        }
+        toReturn = a;
       }
-      return toReturn;
     }
+    return toReturn;
+  }
 
-    public void create(int num)
-    {
-
+  public void create(int num)
+  {
+    if (isOpened){
       Account new_account = this.find_account_stopped(num);
       if (new_account == null){
         new_account = new Account(num);
@@ -82,37 +79,71 @@ class Bank {
       this.list_account_activate.add(new_account);
 
       System.out.println("[BANK "+this.numeroBank+"] Account number "+new_account.get_account_num()+" Added");
+      this.interBank.get_pending_transaction(this.numeroBank);
     }
+  }
 
-    public boolean closeAccount(int num){
-      Account a = this.find_account_activate(num);
-      this.list_account_activate.remove(a);
+  public boolean closeAccount(int num){
+    Account a = this.find_account_activate(num);
+    if (a == null){
+      return false;
+    }
+    this.list_account_activate.remove(a);
+    this.list_account_stopped.add(a);
+    System.out.println("[BANK "+this.numeroBank+"] Account number "+a.get_account_num()+" Removed");
+    return true;
+  }
+
+  public boolean closeAllAccount(){
+    for (Iterator<Account> iter = this.list_account_activate.listIterator(); iter.hasNext(); )
+    {
+      Account a = iter.next();
       this.list_account_stopped.add(a);
       System.out.println("[BANK "+this.numeroBank+"] Account number "+a.get_account_num()+" Removed");
-      return true;
     }
+    this.list_account_activate.clear();
+    return true;
+  }
 
-    public boolean depositAccount(int amount, int num){
+  public boolean depositAccount(int amount, int num){
+    if (isOpened){
       if (amount <= 0){
         return false;
       }
       Account a = this.find_account_activate(num);
+      if (a == null){
+        return false;
+      }
       a.deposit(amount);
-      return true;
+    }else{
+      return false;
     }
+    return true;
+  }
 
-    public boolean withdrawAccount(int amount, int num){
-      Account a = this.find_account_activate(num);
+  public boolean withdrawAccount(int amount, int num){
+    if (isOpened){
+      Account a = null;
+      a =  this.find_account_activate(num);
+      if (a == null){
+        return false;
+      }
       if (a.balance() - amount < 0){
         return false;
       }
       a.withdraw(amount);
-      return true;
+    }else{
+      return false;
     }
+    return true;
 
-    public boolean transfert(int accountNum, int amount, int bankNum, int dest_accountNum)
-    {
-      boolean toReturn = false;
+  }
+
+  public boolean transfert(int accountNum, int amount, int bankNum, int dest_accountNum)
+  {
+    boolean toReturn = false;
+    if (isOpened){
+
       if (this.withdrawAccount(amount, accountNum))
       {
         this.depositAccount(amount, accountNum);
@@ -129,21 +160,31 @@ class Bank {
         }
         toReturn = true;
       }
-      return toReturn;
+    }else{
+      return false;
     }
+    return toReturn;
+  }
 
-    public int balance(int num)
-    {
-      Account a = this.find_account_activate(num);
-      return a.balance();
+  public int balance(int num)
+  {
+    Account a = this.find_account_activate(num);
+    if (a == null){
+      return -1;
     }
+    return a.balance();
+  }
 
-    public boolean recevoirTransaction(Transaction t)
-    {
-      boolean toReturn = false;
+  public boolean recevoirTransaction(Transaction t)
+  {
+    boolean toReturn = false;
+    if (isOpened){
       if(t.bank_dest == this.numeroBank && this.find_account_activate(t.account_destination) != null)
       {
         Account a = this.find_account_activate(t.account_destination);
+        if (a == null){
+          return false;
+        }
         a.deposit(t.amount);
         t.transaction_confirme = true;
         System.out.println("[BANK "+this.numeroBank+"] Money transfer of "+t.amount+"$ received from Bank "+t.bank_source+", Sending confirmation...");
@@ -159,21 +200,24 @@ class Bank {
           System.out.println("InterBank is not reachable right now.... RIP :(");
         }
       }
-      return toReturn;
+    }else{
+      return false;
+    }
+    return toReturn;
+  }
+
+  public void print_accounts(){
+    for (Iterator<Account> iter = this.list_account_activate.listIterator(); iter.hasNext(); )
+    {
+      Account a = iter.next();
+      System.out.println("\t ** ACCOUNT "+a.get_account_num()+" [OPENED]");
     }
 
-    public void print_accounts(){
-      for (Iterator<Account> iter = this.list_account_activate.listIterator(); iter.hasNext(); )
-      {
-        Account a = iter.next();
-        System.out.println("\t ** ACCOUNT "+a.get_account_num()+" [OPENED]");
-      }
-
-      for (Iterator<Account> iter = this.list_account_stopped.listIterator(); iter.hasNext(); )
-      {
-        Account a = iter.next();
-        System.out.println("\t ** ACCOUNT "+a.get_account_num()+" [CLOSED]");
-      }
+    for (Iterator<Account> iter = this.list_account_stopped.listIterator(); iter.hasNext(); )
+    {
+      Account a = iter.next();
+      System.out.println("\t ** ACCOUNT "+a.get_account_num()+" [CLOSED]");
     }
+  }
 
 }

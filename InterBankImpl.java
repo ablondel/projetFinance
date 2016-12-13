@@ -26,7 +26,9 @@ class InterBankImpl extends InterBankPOA
     {
       try
       {
-        if (is_activated(t.bank_dest)){
+        Account a = null;
+        a = find_AccoutBank(t.account_destination, t.bank_dest);
+        if (a != null){
           BankTransaction bank = this.find_bank(t.bank_dest);
           InterBankSender ibs = new InterBankSender(t, bank, t.transaction_confirme);
           ibs.start();
@@ -39,14 +41,20 @@ class InterBankImpl extends InterBankPOA
         {
           if(is_stopped(t.bank_dest)){
             System.out.println("------------------------------------------");
-            System.out.println("Banque "+t.bank_dest+" is not available right now!");
+            System.out.println("Bank "+t.bank_dest+" is not available right now!");
+            System.out.println("------------------------------------------");
+            this.list_transaction_pending.add(t);
+          }
+          else if (is_activated(t.bank_dest)){
+            System.out.println("------------------------------------------");
+            System.out.println("Bank "+t.bank_dest+" is available but Account "+t.account_destination+" is not available right now!");
             System.out.println("------------------------------------------");
             this.list_transaction_pending.add(t);
           }
           else
           {
             System.out.println("------------------------------------------");
-            System.out.println("Banque "+t.bank_dest+" doesn't exist right now!");
+            System.out.println("Bank "+t.bank_dest+" doesn't exist right now!");
             System.out.println("------------------------------------------");
             this.list_transaction_pending.add(t);
           }
@@ -117,6 +125,11 @@ class InterBankImpl extends InterBankPOA
       System.out.println("------------------------------------------");
     }
     return true;
+  }
+  public void get_pending_transaction(int num){
+    BankTransaction bank = null;
+    bank = find_bank(num);
+    this.send_pending_transactions(bank);
   }
   private void send_pending_transactions(BankTransaction b)
   {
@@ -229,14 +242,16 @@ class InterBankImpl extends InterBankPOA
       Bank b = iter.next();
       if (b.get_num() == num)
       {
+        b.close();
         list_bank_active.remove(b);
         list_bank_stopped.add(b);
         BankTransaction bt = this.find_bank(num);
+
         list_bank_transaction.remove(bt);
         System.out.println("------------------------------------------");
         System.out.println("Bank number "+b.get_num()+" CLOSE");
         System.out.println("------------------------------------------");
-        // b.close();
+
         print_banks();
         return true;
       }
@@ -253,7 +268,7 @@ class InterBankImpl extends InterBankPOA
     Bank b = this.activate_bank(num);
     if (b != null){
       bankA = b;
-      // bankA.open();
+      bankA.open();
     }else{
 
       /* CLIENT of InterBanK */
@@ -340,6 +355,22 @@ class InterBankImpl extends InterBankPOA
       if (bank.get_num() == num)
       {
           toReturn = bank;
+      }
+    }
+    return toReturn;
+  }
+
+  private Account find_AccoutBank(int numa, int numb)
+  {
+    Account toReturn = null;
+    for (Iterator<Bank> iter = this.list_bank_active.listIterator(); iter.hasNext(); )
+    {
+      Bank bank = iter.next();
+      if (bank.get_num() == numb)
+      {
+          Account a = null;
+          a = bank.find_account_activate(numa);
+          toReturn = a;
       }
     }
     return toReturn;
