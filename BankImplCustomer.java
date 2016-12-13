@@ -35,14 +35,12 @@ class BankImplCustomer extends BankCustomerPOA {
 
   public boolean deposit(int amount, int num)
   {
-    this.bankRef.depositAccount(amount,num);
-    return true;
+    return this.bankRef.depositAccount(amount,num);
   }
 
   public boolean withdraw(int amount, int num)
   {
-    this.bankRef.withdrawAccount(amount,num);
-    return true;
+    return this.bankRef.withdrawAccount(amount,num);
   }
 
   public boolean transfert(int accountNum, int amount, int bankNum, int dest_accountNum)
@@ -55,6 +53,9 @@ class BankImplCustomer extends BankCustomerPOA {
     return this.bankRef.balance(num);
   }
 
+  public boolean closeAccount(int num){
+    return this.bankRef.closeAccount(num);
 
+  }
 
 }

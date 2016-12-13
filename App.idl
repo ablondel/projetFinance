@@ -25,6 +25,7 @@ module App
     boolean deposit(in unsigned long amount, in unsigned long num);
     boolean withdraw(in unsigned long amount, in unsigned long num);
     boolean transfert(in unsigned long myNum, in unsigned long amount, in unsigned long numBank, in unsigned long num);
+    boolean closeAccount(in unsigned long num);
     long balance(in unsigned long num);
     long get_num();
   };
@@ -34,6 +35,7 @@ module App
     boolean envoyerTransaction(in Transaction t);
     boolean confirmerTransaction(in Transaction t);
     boolean join(in unsigned long num);
+    boolean desactivate_bank(in unsigned long num);
     long get_num();
   };
 };
